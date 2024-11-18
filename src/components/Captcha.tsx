@@ -23,10 +23,9 @@ export function Captcha({ onVerify, isDark }: CaptchaProps) {
   }, []);
 
   const generateToken = (answer: number) => {
-    // Créer un token simple basé sur la réponse et un timestamp
     const timestamp = Date.now();
     const data = `${answer}-${timestamp}`;
-    return btoa(data); // Encode en base64
+    return btoa(data); 
   };
 
   const handleSubmit = () => {

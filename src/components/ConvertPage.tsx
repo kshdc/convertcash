@@ -16,7 +16,7 @@ const cryptocurrencies = [
 type Step = 'coupon' | 'method' | 'details' | 'paysafecard';
 type CouponType = 'paysafecard' | 'transcash';
 
-export default function ConvertPage() {
+export function ConvertPage() {
   const { isDark } = useThemeStore();
   const [currentStep, setCurrentStep] = useState<Step>('coupon');
   const [couponType, setCouponType] = useState<CouponType | null>(null);
@@ -95,20 +95,24 @@ export default function ConvertPage() {
                 onClick={() => {
                   setCouponType('paysafecard');
                   setCurrentStep('method');
-                } }
+                }}
                 isDark={isDark}
                 borderColor={borderColor}
-                textColor={textColor} icon={undefined}              />
+                textColor={textColor}
+                icon={undefined}
+              />
               <PaymentMethodButton
                 label="Transcash"
                 isSelected={couponType === 'transcash'}
                 onClick={() => {
                   setCouponType('transcash');
                   setCurrentStep('method');
-                } }
+                }}
                 isDark={isDark}
                 borderColor={borderColor}
-                textColor={textColor} icon={undefined}              />
+                textColor={textColor}
+                icon={undefined}
+              />
             </div>
           </div>
         </div>

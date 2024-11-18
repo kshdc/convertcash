@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { useThemeStore } from '../store/themeStore';
-import ConvertPage from './ConvertPage';
+import { ConvertPage } from '../components/ConvertPage';
 import TransactionsPage from './TransactionsPage';
 import RewardsPage from './RewardsPage';
+import { CrispChat } from '../components/CrispChat';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -20,9 +21,9 @@ export default function DashboardPage() {
   }, [navigate]);
 
   const renderContent = () => {
-    const contentClass = `bg-${isDark ? 'gray-800' : 'white'} shadow-lg rounded-lg p-6 transition-colors duration-200`;
-    const titleClass = `text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`;
-    const textClass = `mt-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`;
+    const contentClass = `bg-${isDark ? 'gray-800' : 'white'} shadow-lg rounded-lg p-4 sm:p-6 lg:p-8 transition-colors duration-200`;
+    const titleClass = `text-lg sm:text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`;
+    const textClass = `mt-2 text-sm sm:text-base ${isDark ? 'text-gray-300' : 'text-gray-600'}`;
 
     switch (activeTab) {
       case 'home':
@@ -49,7 +50,10 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout activeTab={activeTab} setActiveTab={setActiveTab}>
-      {renderContent()}
+      <CrispChat />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        {renderContent()}
+      </div>
     </DashboardLayout>
   );
 }

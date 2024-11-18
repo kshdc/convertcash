@@ -76,7 +76,6 @@ export default function TransactionList() {
         throw new Error(errorData.error || 'Failed to delete transaction');
       }
 
-      // Refresh transactions list
       await fetchTransactions();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete transaction');

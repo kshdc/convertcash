@@ -6,12 +6,14 @@ import Reviews from '../components/Reviews';
 import Features from '../components/Features';
 import FAQ from '../components/FAQ';
 import Footer from '../components/Footer';
+import { CrispChat } from '../components/CrispChat';
 
 export default function HomePage() {
   const { isDark } = useThemeStore();
 
   return (
     <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
+      <CrispChat />
       <Navbar />
       <main>
         <Hero />

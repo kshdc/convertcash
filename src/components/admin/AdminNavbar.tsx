@@ -16,22 +16,26 @@ export function AdminNavbar() {
     <nav className={`${isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200'} border-b transition-colors duration-200`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center space-x-8">
+          <div className="flex-1 flex items-center">
             <Link 
               to="/" 
               className={`text-xl font-bold ${isDark ? 'text-white hover:text-gray-200' : 'text-gray-900 hover:text-gray-700'} transition-colors`}
             >
               YeuSwap
             </Link>
+          </div>
+
+          <div className="flex-1 flex items-center justify-center">
             <button
               onClick={() => navigate('/dashboard')}
               className={`flex items-center gap-2 ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
             >
+              <ArrowLeft className="w-4 h-4" />
               <span>Retour au Dashboard</span>
             </button>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex-1 flex items-center justify-end space-x-4">
             <button
               onClick={toggleTheme}
               className={`p-2 rounded-md ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors duration-200`}

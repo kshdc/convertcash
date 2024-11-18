@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoginForm } from './LoginForm';
 import { RegisterForm } from './RegisterForm';
@@ -23,6 +23,13 @@ export function Auth() {
     confirmPassword: ''
   });
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent, captchaToken: string) => {
     e.preventDefault();
@@ -50,6 +57,7 @@ export function Auth() {
 
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', formData.username);
+        localStorage.setItem('tokenExpiration', String(Date.now() + data.expiresIn * 1000));
         navigate('/dashboard');
       } else {
         if (formData.password !== formData.confirmPassword) {

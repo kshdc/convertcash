@@ -174,49 +174,49 @@ export default function AdminPage() {
   return (
     <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <AdminNavbar />
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className={`text-2xl font-bold mb-8 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <h1 className={`text-xl sm:text-2xl font-bold mb-6 sm:mb-8 ${isDark ? 'text-white' : 'text-gray-900'}`}>
           Administration
         </h1>
 
-        <div className="flex gap-4 mb-6">
+        <div className="flex flex-wrap gap-2 sm:gap-4 mb-4 sm:mb-6">
           <TabButton id="users" label="Utilisateurs" icon={Users} />
           <TabButton id="transactions" label="Transactions" icon={CreditCard} />
           <TabButton id="logs" label="Logs" icon={History} />
         </div>
 
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 text-red-600 rounded-lg p-4">
+          <div className="mb-4 sm:mb-6 bg-red-50 border border-red-200 text-red-600 rounded-lg p-3 sm:p-4 text-sm">
             {error}
           </div>
         )}
 
-        <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-lg p-6`}>
+        <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-lg p-4 sm:p-6`}>
           {activeTab === 'users' && (
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[640px]">
                 <thead>
-                  <tr className={`text-left ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    <th className="p-4">ID</th>
-                    <th className="p-4">Username</th>
-                    <th className="p-4">Email</th>
-                    <th className="p-4">Rank</th>
-                    <th className="p-4">IP</th>
+                  <tr className={`text-left text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <th className="p-3 sm:p-4">ID</th>
+                    <th className="p-3 sm:p-4">Username</th>
+                    <th className="p-3 sm:p-4">Email</th>
+                    <th className="p-3 sm:p-4">Rank</th>
+                    <th className="p-3 sm:p-4">IP</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.map((user) => (
                     <tr
                       key={user.id}
-                      className={`border-t ${
+                      className={`border-t text-sm ${
                         isDark ? 'border-gray-700 text-gray-300' : 'border-gray-200 text-gray-600'
                       }`}
                     >
-                      <td className="p-4">{user.id}</td>
-                      <td className="p-4">{user.username}</td>
-                      <td className="p-4">{user.mail}</td>
-                      <td className="p-4">{user.rank}</td>
-                      <td className="p-4">{user.adresse_ip}</td>
+                      <td className="p-3 sm:p-4">{user.id}</td>
+                      <td className="p-3 sm:p-4">{user.username}</td>
+                      <td className="p-3 sm:p-4">{user.mail}</td>
+                      <td className="p-3 sm:p-4">{user.rank}</td>
+                      <td className="p-3 sm:p-4">{user.adresse_ip}</td>
                     </tr>
                   ))}
                 </tbody>
