@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { User } from '../models/User';
 import { Transaction } from '../models/Transaction';
 import { Log } from '../models/Log';
+import { Notification } from '../models/Notification';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ const sequelize = new Sequelize({
 User.initialize(sequelize);
 Transaction.initialize(sequelize);
 Log.initialize(sequelize);
+Notification.initialize(sequelize);
 
 sequelize.sync({ force: false })
   .then(() => {

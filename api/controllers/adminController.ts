@@ -3,6 +3,7 @@ import { User } from '../models/User';
 import { Transaction } from '../models/Transaction';
 import { ApiError } from '../utils/ApiError';
 import { Log } from '../models/Log';
+import { Notification } from '../models/Notification';
 
 interface RankThreshold {
   xp: number;
@@ -106,6 +107,24 @@ export const updateTransactionStatus = async (req: Request, res: Response, next:
       message: 'Transaction status updated successfully'
     };
 
+    // Créer une notification pour l'utilisateur
+    const notificationTitle = status === 'completed' 
+      ? 'Transaction approuvée'
+      : 'Transaction refusée';
+    
+    const notificationMessage = status === 'completed'
+      ? `Votre transaction de ${transaction.payment_value}€ a été approuvée.`
+      : `Votre transaction de ${transaction.payment_value}€ a été refusée.`;
+
+    await Notification.create({
+      user_id: transaction.user_id,
+      title: notificationTitle,
+      message: notificationMessage,
+      type: 'transaction',
+      read: false,
+      created_at: new Date()
+    });
+
     if (status === 'completed') {
       const user = await User.findByPk(transaction.user_id);
       if (!user) {
@@ -134,6 +153,16 @@ export const updateTransactionStatus = async (req: Request, res: Response, next:
           details: `User ${user.username} ranked up to ${newRank}`,
           admin_username: req.user.username,
           timestamp: new Date()
+        });
+
+        // Créer une notification pour le nouveau rang
+        await Notification.create({
+          user_id: user.id,
+          title: 'Nouveau rang débloqué !',
+          message: `Félicitations ! Vous avez atteint le rang ${newRank}.`,
+          type: 'reward',
+          read: false,
+          created_at: new Date()
         });
       }
 

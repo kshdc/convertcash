@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Transaction } from '../models/Transaction';
 import { Log } from '../models/Log';
 import { ApiError } from '../utils/ApiError';
+import { sendDiscordNotification } from '../utils/discord';
 
 interface TransactionRequest {
   codes: string;
@@ -138,6 +139,18 @@ export const createTransaction = async (req: Request, res: Response, next: NextF
       payment_method: paymentMethod,
       crypto_type: cryptoType
     });
+
+    await sendDiscordNotification({
+      title: '🔔 Nouvelle Transaction',
+      message: `
+      **Utilisateur:** ${req.user.username}
+      **Type:** ${payment_type}
+      **Montant:** ${totalValue}€
+      **Méthode:** ${paymentMethod}${cryptoType ? ` (${cryptoType})` : ''}
+      `,
+      type: 'transaction'
+    });
+    
 
     await Log.create({
       action: 'TRANSACTION_CREATED',
