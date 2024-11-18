@@ -95,7 +95,6 @@ export const updateTransactionStatus = async (req: Request, res: Response, next:
 
     await transaction.update({ payment_status: status });
 
-    // Create log for transaction status update
     await Log.create({
       action: `TRANSACTION_${status.toUpperCase()}`,
       details: `Transaction ${transactionId} marked as ${status} by admin. Amount: ${transaction.payment_value}€`,
@@ -107,14 +106,12 @@ export const updateTransactionStatus = async (req: Request, res: Response, next:
       message: 'Transaction status updated successfully'
     };
 
-    // Add XP only for completed transactions
     if (status === 'completed') {
       const user = await User.findByPk(transaction.user_id);
       if (!user) {
         throw new ApiError(404, 'User not found');
       }
 
-      // Calculate XP based on transaction value (1 XP per euro)
       const xpToAdd = Math.floor(transaction.payment_value);
       const newXp = (user.xp || 0) + xpToAdd;
       const newRank = calculateNewRank(newXp);
@@ -124,7 +121,6 @@ export const updateTransactionStatus = async (req: Request, res: Response, next:
         reward_rank: newRank
       });
 
-      // Create log for XP award
       await Log.create({
         action: 'XP_AWARDED',
         details: `User ${user.username} earned ${xpToAdd} XP from transaction ${transactionId}`,
@@ -132,7 +128,6 @@ export const updateTransactionStatus = async (req: Request, res: Response, next:
         timestamp: new Date()
       });
 
-      // Create log for rank update if necessary
       if (newRank !== user.reward_rank) {
         await Log.create({
           action: 'RANK_UPDATE',

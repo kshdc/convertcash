@@ -15,7 +15,6 @@ dotenv.config();
 
 const app = express();
 
-// CORS configuration
 const corsOptions = {
   origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -34,7 +33,6 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Error handling for JSON parsing
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (err instanceof SyntaxError && 'body' in err) {
     return res.status(400).json({ error: 'Invalid JSON' });
@@ -55,7 +53,6 @@ app.use('/api/users', userRouter);
 app.use('/api/transactions', transactionRouter);
 app.use('/api/admin', adminRouter);
 
-// Global error handler should be last
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;

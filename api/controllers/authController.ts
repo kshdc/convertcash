@@ -6,22 +6,27 @@ import { ApiError } from '../utils/ApiError';
 
 const validateMathCaptcha = (token: string): boolean => {
   try {
-    // Décoder le token base64
     const decoded = Buffer.from(token, 'base64').toString();
     const [answer, timestamp] = decoded.split('-');
     
-    // Vérifier si le token n'est pas trop vieux (5 minutes max)
     const now = Date.now();
     const tokenTime = parseInt(timestamp);
     if (now - tokenTime > 5 * 60 * 1000) {
       return false;
     }
 
-    // Vérifier que la réponse est un nombre
     return !isNaN(parseInt(answer));
   } catch (error) {
     return false;
   }
+};
+
+const generateToken = (user: { id: number; username: string }): string => {
+  return jwt.sign(
+    { id: user.id, username: user.username },
+    process.env.JWT_SECRET || 'default-secret-key',
+    { expiresIn: '1h' }
+  );
 };
 
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -54,17 +59,14 @@ export const register = async (req: Request, res: Response, next: NextFunction):
       xp: 0
     });
 
-    const token = jwt.sign(
-      { id: user.id, username: user.username },
-      process.env.JWT_SECRET || 'default-secret-key',
-      { expiresIn: '24h' }
-    );
+    const token = generateToken(user);
 
     console.log('\x1b[32m%s\x1b[0m', `[${new Date().toISOString()}] New registration: ${username}`);
 
     res.status(201).json({
       message: 'User registered successfully',
-      token
+      token,
+      expiresIn: 3600 
     });
   } catch (error) {
     next(error);
@@ -94,17 +96,31 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
       throw new ApiError(401, 'Invalid credentials');
     }
 
-    const token = jwt.sign(
-      { id: user.id, username: user.username },
-      process.env.JWT_SECRET || 'default-secret-key',
-      { expiresIn: '24h' }
-    );
+    const token = generateToken(user);
 
     console.log('\x1b[34m%s\x1b[0m', `[${new Date().toISOString()}] User logged in: ${username}`);
 
     res.json({
       message: 'Login successful',
-      token
+      token,
+      expiresIn: 3600
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const refreshToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    if (!req.user?.id || !req.user?.username) {
+      throw new ApiError(401, 'Not authenticated');
+    }
+
+    const token = generateToken(req.user);
+
+    res.json({
+      token,
+      expiresIn: 3600  
     });
   } catch (error) {
     next(error);
