@@ -48,7 +48,7 @@ export const getLogs = async (req: Request, res: Response, next: NextFunction): 
   try {
     const logs = await Log.findAll({
       order: [['timestamp', 'DESC']],
-      limit: 100
+      limit: 30
     });
 
     res.json(logs);
