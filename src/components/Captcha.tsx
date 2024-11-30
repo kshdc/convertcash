@@ -11,8 +11,8 @@ export function Captcha({ onVerify, isDark }: CaptchaProps) {
   const [error, setError] = useState(false);
 
   const generateNumbers = () => {
-    const a = Math.floor(Math.random() * 40) + 10;
-    const b = Math.floor(Math.random() * 40) + 10;
+    const a = Math.floor(Math.random() * 8) + 1;
+    const b = Math.floor(Math.random() * 8) + 1;
     setNumbers({ a, b });
     setAnswer('');
     setError(false);
