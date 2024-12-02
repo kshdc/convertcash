@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
+import path from 'path';
 import { authRouter } from './routes/auth';
 import { userRouter } from './routes/users';
 import { transactionRouter } from './routes/transactions';
@@ -56,6 +57,13 @@ app.use('/api/admin', adminRouter);
 app.use('/api/notifications', notificationRouter);
 
 app.use(errorHandler);
+
+const distPath = path.join(__dirname, '../dist');
+app.use(express.static(distPath));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
